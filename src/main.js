@@ -7,6 +7,13 @@ const config = {
     height: 768,
     parent: 'game-container',
     backgroundColor: '#0d0221',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 2000 },
+            debug: false
+        }
+    },
     scale: {
         mode: Scale.FIT,
         autoCenter: Scale.CENTER_BOTH
