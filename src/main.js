@@ -1,7 +1,23 @@
-import StartGame from './game/main';
+import { AUTO, Game, Scale } from 'phaser';
+import { GameScene } from './scenes/GameScene';
 
-document.addEventListener('DOMContentLoaded', () => {
+const config = {
+    type: AUTO,
+    width: 1024,
+    height: 768,
+    parent: 'game-container',
+    backgroundColor: '#0d0221',
+    scale: {
+        mode: Scale.FIT,
+        autoCenter: Scale.CENTER_BOTH
+    },
+    scene: [
+        GameScene
+    ]
+};
 
-    StartGame('game-container');
+const startGame = () => {
+    new Game({ ...config, parent: 'game-container' });
+};
 
-});
+document.addEventListener('DOMContentLoaded', startGame);
