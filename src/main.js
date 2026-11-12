@@ -1,4 +1,5 @@
 import { AUTO, Game, Scale } from 'phaser';
+import { MenuScene } from './scenes/MenuScene';
 import { GameScene } from './scenes/GameScene';
 
 const config = {
@@ -19,6 +20,7 @@ const config = {
         autoCenter: Scale.CENTER_BOTH
     },
     scene: [
+        MenuScene,
         GameScene
     ]
 };
