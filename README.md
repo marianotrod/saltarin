@@ -1,153 +1,136 @@
-# Phaser Vite Template
+# SALTARÍN
 
-This is a Phaser 4 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
+Runner de un botón con auto-scroll lateral. El jugador controla un cubo de neón que avanza solo por el escenario y tiene que saltar trampas para llegar al final de cada nivel. Son 3 niveles y cada uno agrega un tipo de obstáculo nuevo.
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-vite-ts)**
+Trabajo Práctico Módulo 7: Desarrollo Tecnológico 2 (UNRaf).
 
-### Versions
+## Integrantes
 
-This template has been updated for:
+- Mariano _[Apellido]_
+- _[Nombre Apellido]_
 
-- [Phaser 4.0.0](https://github.com/phaserjs/phaser)
-- [Vite 6.3.1](https://github.com/vitejs/vite)
+## Tecnologías
 
-![screenshot](screenshot.png)
+- JavaScript
+- Node.js
+- Vite
+- Phaser 4 (Arcade Physics)
 
-## Requirements
+## Instalación
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
-| `npm run build` | Create a production build in the `dist` folder |
-| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
-| `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
-
-
-## Writing Code
-
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
-
-The local development server runs on `http://localhost:8080` by default. Please see the Vite documentation if you wish to change this, or add SSL support.
-
-Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
-
-## Template Project Structure
-
-We have provided a default project structure to get you started. This is as follows:
-
-| Path                         | Description                                                |
-|------------------------------|------------------------------------------------------------|
-| `index.html`                 | A basic HTML page to contain the game.                     |
-| `public/assets`              | Game sprites, audio, etc. Served directly at runtime.      |
-| `public/style.css`           | Global layout styles.                                      |
-| `src/main.js`                | Application bootstrap.                                     |
-| `src/game`                   | Folder containing the game code.                           |
-| `src/game/main.js`           | Game entry point: configures and starts the game.          |
-| `src/game/scenes`            | Folder with all Phaser game scenes.                        | 
-
-## Handling Assets
-
-Vite supports loading assets via JavaScript module `import` statements.
-
-This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
-
-```js
-import logoImg from './assets/logo.png'
+```
+npm install
 ```
 
-To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
+## Ejecutar
 
-```js
-preload ()
-{
-    //  This is an example of an imported bundled image.
-    //  Remember to import it at the top of this file
-    this.load.image('logo', logoImg);
-
-    //  This is an example of loading a static image
-    //  from the public/assets folder:
-    this.load.image('background', 'assets/bg.png');
-}
+```
+npm run dev
 ```
 
-When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
+## Build
 
-## Deploying to Production
-
-After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
-
-In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
-
-## Customizing the Template
-
-### Vite
-
-If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
-
-## About log.js
-
-If you inspect our node scripts you will see there is a file called `log.js`. This file makes a single silent API call to a domain called `gryzor.co`. This domain is owned by Phaser Studio Inc. The domain name is a homage to one of our favorite retro games.
-
-We send the following 3 pieces of data to this API: The name of the template being used (vue, react, etc). If the build was 'dev' or 'prod' and finally the version of Phaser being used.
-
-At no point is any personal data collected or sent. We don't know about your project files, device, browser or anything else. Feel free to inspect the `log.js` file to confirm this.
-
-Why do we do this? Because being open source means we have no visible metrics about which of our templates are being used. We work hard to maintain a large and diverse set of templates for Phaser developers and this is our small anonymous way to determine if that work is actually paying off, or not. In short, it helps us ensure we're building the tools for you.
-
-However, if you don't want to send any data, you can use these commands instead:
-
-Dev:
-
-```bash
-npm run dev-nolog
+```
+npm run build
 ```
 
-Build:
+## Gameplay
 
-```bash
-npm run build-nolog
+El cubo avanza automáticamente y el jugador solo decide cuándo saltar. Si toca una trampa, muere, el nivel reinicia desde el principio y se suma un intento. Al llegar al final de un nivel se pasa al siguiente.
+
+### Objetivo
+
+Completar los 3 niveles con la menor cantidad de intentos posible.
+
+### Mecánicas principales
+
+- **Salto de altura fija:** solo con apoyo, sin doble salto.
+- **Avance automático:** el mundo se desplaza y la velocidad aumenta en cada nivel.
+- **Obstáculos progresivos:**
+  - Nivel 1: pinchos
+  - Nivel 2: se suman los pozos
+  - Nivel 3: se suman los bloques (se puede caminar encima; chocarlos de costado mata)
+- **Progreso:** barra con el % recorrido del nivel, contador de intentos totales e indicador de nivel.
+- **Victoria:** completar el nivel 3. **Derrota:** tocar una trampa reinicia el nivel actual.
+
+## Controles
+
+| Acción | Control |
+|---|---|
+| Saltar / Comenzar / Continuar | Espacio o click |
+| Reiniciar el juego (pantalla final) | R |
+
+## Arquitectura
+
+El código está organizado por responsabilidad: escenas, entidades, sistemas, patrones y datos de niveles. Los niveles son **datos** (`src/data/levels.js`), no código: para balancear un nivel se editan posiciones y velocidades sin tocar la lógica.
+
+```
+src/
+├── scenes/     MenuScene, GameScene, LevelCompleteScene, VictoryScene
+├── entities/   Player, Spike, Pit, Block
+├── systems/    LevelManager, HUD
+├── patterns/   ObstaclePool, EventBus
+├── data/       levels.js
+├── assets/     (vacío: todo se dibuja con formas de Phaser)
+└── main.js
 ```
 
-Or, to disable the log entirely, simply delete the file `log.js` and remove the call to it in the `scripts` section of `package.json`:
-
-Before:
-
-```json
-"scripts": {
-    "dev": "node log.js dev & dev-template-script",
-    "build": "node log.js build & build-template-script"
-},
+```
+GameScene
+├── Player
+├── LevelManager
+│   └── ObstaclePool
+│       ├── Spike
+│       ├── Pit
+│       └── Block
+└── HUD
+        ▲
+     EventBus (eventos entre sistemas)
 ```
 
-After:
+### Patrones de diseño utilizados
 
-```json
-"scripts": {
-    "dev": "dev-template-script",
-    "build": "build-template-script"
-},
-```
+**Object Pool (`src/patterns/ObstaclePool.js`)**
+- *Problema:* en cada nivel aparecen y desaparecen decenas de obstáculos, y el nivel se reinicia muchas veces.
+- *Solución:* hay un pool por tipo de obstáculo. El `LevelManager` pide un obstáculo cuando su posición entra por la derecha de la pantalla y lo devuelve cuando sale por la izquierda. Al reiniciar el nivel, todos los obstáculos vuelven al pool: no se crean ni se destruyen objetos durante la partida.
 
-Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
+**Observer (`src/patterns/EventBus.js`)**
+- *Problema:* el HUD, el contador de intentos y el flujo entre niveles dependen de lo que pasa en el juego, pero no deberían conocerse entre sí.
+- *Solución:* un bus de eventos (`player:died`, `level:progress`, `level:completed`, `attempts:changed`). Cada sistema se suscribe a lo que le interesa y se desuscribe en el evento `shutdown` de la escena, para que los listeners no se dupliquen en cada reinicio.
 
-## Join the Phaser Community!
+## Desarrollo con OpenCode
 
-We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
+### Agentes de OpenCode utilizados
 
-**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
-**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
-**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
-**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
-**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
+- **Plan:** análisis del GDD y del proyecto, y planificación de cada funcionalidad sin modificar archivos.
+- **Build:** implementación de un paso concreto del plan por vez.
+- **Modelo:** Big Pickle (gratuito, vía OpenCode Zen), en la versión de terminal de OpenCode 1.19.5.
+- **Contexto del agente:** `AGENTS.md` (stack, arquitectura, patrones obligatorios y reglas), generado con `/init` y completado con la plantilla de la cátedra.
 
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+### Flujo de trabajo
 
-The Phaser logo and characters are &copy; 2011 - 2025 Phaser Studio Inc.
+Para cada funcionalidad: se eligió un punto del GDD → se analizó con **Plan** → se revisó y corrigió el plan → se implementó un paso con **Build** → se probó con `npm run dev` → se corrigieron los errores → se hizo commit.
 
-All rights reserved.
+### Principales prompts empleados
+
+Todos los prompts siguen la plantilla Contexto / Objetivo / Comportamiento esperado / Restricciones / Criterio de finalización / Verificación.
+
+**Plan general (Plan):**
+> Analizá docs/GDD.md, AGENTS.md y la estructura actual del proyecto. Necesito un plan de implementación completo del juego. Para cada paso indicá qué se desarrolla, archivos afectados, comportamiento esperado, cómo se prueba, dependencias y qué queda fuera. [...] Detectá posibles problemas con el reinicio de nivel. No modifiques ningún archivo todavía.
+
+_[Completar con los prompts de Build más representativos, por ejemplo el del ObstaclePool y el del EventBus.]_
+
+### Problemas encontrados y soluciones aplicadas
+
+| Problema | Solución |
+|---|---|
+| `npm` no se reconocía como comando: Node.js no estaba instalado. | Se instaló Node.js. |
+| `/init` se ejecutó antes de crear el proyecto Phaser y generó un `AGENTS.md` que indicaba que no había código. | Se creó el scaffold con `npx @phaserjs/create-game@latest` y se completó `AGENTS.md` con la plantilla de la cátedra y las reglas del GDD. |
+| La app de escritorio y la versión de terminal de OpenCode compartían la base de datos de sesiones y fallaban con "Database is not empty and has no session table". | Se configuró una base de datos separada para la terminal con la variable `OPENCODE_DB`. |
+| La carpeta `Docs` quedó con mayúscula; GitHub distingue mayúsculas y el GDD debía estar en `docs/`. | Se renombró con `git mv` en dos pasos (Windows no detecta cambios que son solo de mayúsculas). |
+| _[Completar con los problemas que aparezcan durante el desarrollo]_ | |
+
+## Documentación
+
+- GDD: [`docs/GDD.pdf`](docs/GDD.pdf)
+- Reglas del agente: [`AGENTS.md`](AGENTS.md)

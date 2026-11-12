@@ -1,7 +1,7 @@
 # GDD — SALTARÍN
 
 **Género:** Runner de un botón (auto-scroll lateral)
-**Plataforma:** Navegador (Phaser 3 + Vite + JavaScript)
+**Plataforma:** Navegador (Phaser 4 + Vite + JavaScript)
 **Integrantes:** _[Nombre Apellido]_, _[Nombre Apellido]_
 
 ---
@@ -34,8 +34,8 @@ El jugador controla un cubo de neón que avanza solo por un escenario. Con una �
 - Sin doble salto. No importa cuánto tiempo se mantenga presionada la tecla.
 
 ### Avance automático
-- El jugador permanece fijo en X (~25% del ancho de pantalla).
-- El mundo (suelo y obstáculos) se desplaza hacia la izquierda a la velocidad del nivel.
+- El jugador avanza en el mundo a la velocidad del nivel y la cámara lo sigue, manteniéndolo visualmente fijo en X (~25% del ancho de pantalla). Para el jugador, el escenario "viene" hacia él.
+- Los obstáculos y el suelo son estáticos en el mundo (cuerpos estáticos de Arcade Physics), lo que simplifica las colisiones.
 
 ### Muerte
 - Tocar un pincho, caer en un pozo o chocar un bloque de costado provoca muerte instantánea.
