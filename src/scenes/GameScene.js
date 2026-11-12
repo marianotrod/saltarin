@@ -1,5 +1,6 @@
 import { Input, Scene } from 'phaser';
 import { Player, PLAYER_SIZE } from '../entities/Player';
+import { HUD } from '../systems/HUD';
 import { GROUND_Y, LEVEL_START_X, LevelManager, PLAYER_SCREEN_X } from '../systems/LevelManager';
 
 export class GameScene extends Scene
@@ -12,6 +13,12 @@ export class GameScene extends Scene
     create ()
     {
         this.levelManager = new LevelManager(this, 0);
+
+        this.hud = new HUD(
+            this,
+            this.levelManager.level.number,
+            this.levelManager.totalLevels
+        );
 
         this.player = new Player(
             this,
@@ -34,6 +41,7 @@ export class GameScene extends Scene
 
         this.events.once('shutdown', () => {
             this.input.off('pointerdown', this.handlePointerDown);
+            this.hud.destroy();
         });
     }
 

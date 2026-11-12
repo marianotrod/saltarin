@@ -1,4 +1,5 @@
 import { LEVELS } from '../data/levels';
+import { EventBus, EVENTS } from '../patterns/EventBus';
 
 export const GROUND_Y = 620;
 export const PLAYER_SCREEN_X = 256;
@@ -15,9 +16,11 @@ export class LevelManager
     {
         this.scene = scene;
         this.level = LEVELS[levelIndex];
+        this.totalLevels = LEVELS.length;
         this.speed = this.level.speed;
         this.progress = 0;
         this.completed = false;
+        this.lastProgressPercent = -1;
 
         this.createGround();
     }
@@ -58,6 +61,14 @@ export class LevelManager
     update (playerX)
     {
         this.progress = Math.min(Math.max(playerX - LEVEL_START_X, 0) / this.level.length, 1);
+
+        const percent = Math.floor(this.progress * 100);
+
+        if (percent !== this.lastProgressPercent)
+        {
+            this.lastProgressPercent = percent;
+            EventBus.emit(EVENTS.LEVEL_PROGRESS, percent);
+        }
 
         if (!this.completed && this.progress >= 1)
         {
