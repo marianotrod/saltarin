@@ -3,7 +3,16 @@ export const LEVELS = [
         number: 1,
         speed: 300,
         length: 4000,
-        obstacles: []
+        obstacles: [
+            { type: 'spike', x: 600, count: 1 },
+            { type: 'spike', x: 1000, count: 1 },
+            { type: 'spike', x: 1400, count: 2 },
+            { type: 'spike', x: 1900, count: 1 },
+            { type: 'spike', x: 2150, count: 1 },
+            { type: 'spike', x: 2700, count: 3 },
+            { type: 'spike', x: 3200, count: 2 },
+            { type: 'spike', x: 3500, count: 1 }
+        ]
     },
     {
         number: 2,
