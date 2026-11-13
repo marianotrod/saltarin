@@ -4,6 +4,8 @@ import { HUD } from '../systems/HUD';
 import { GROUND_Y, LEVEL_START_X, LevelManager, PLAYER_SCREEN_X } from '../systems/LevelManager';
 import { EventBus, EVENTS } from '../patterns/EventBus';
 
+const FALL_DEATH_DEPTH = 120;
+
 export class GameScene extends Scene
 {
     constructor ()
@@ -47,8 +49,15 @@ export class GameScene extends Scene
         this.physics.add.overlap(
             this.player,
             this.levelManager.spikeGroup,
-            this.handleSpikeOverlap,
-            this.canHitSpike,
+            this.handleObstacleOverlap,
+            this.canHitObstacle,
+            this
+        );
+        this.physics.add.overlap(
+            this.player,
+            this.levelManager.pitGroup,
+            this.handleObstacleOverlap,
+            this.canHitObstacle,
             this
         );
 
@@ -88,6 +97,12 @@ export class GameScene extends Scene
             return;
         }
 
+        if (this.player.y - PLAYER_SIZE / 2 > GROUND_Y + FALL_DEATH_DEPTH)
+        {
+            EventBus.emit(EVENTS.PLAYER_DIED);
+            return;
+        }
+
         if (this.levelManager.update(this.player.x))
         {
             this.finishLevel();
@@ -110,16 +125,16 @@ export class GameScene extends Scene
         }
     }
 
-    canHitSpike (player, spike)
+    canHitObstacle (player, obstacle)
     {
-        return spike.active === true &&
+        return obstacle.active === true &&
             this.levelActive &&
             !this.isDying &&
             !this.transitioning &&
             !this.levelManager.completed;
     }
 
-    handleSpikeOverlap ()
+    handleObstacleOverlap ()
     {
         if (!this.levelActive || this.isDying || this.transitioning || this.levelManager.completed)
         {
