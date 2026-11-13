@@ -1,6 +1,8 @@
 import { AUTO, Game, Scale } from 'phaser';
 import { MenuScene } from './scenes/MenuScene';
 import { GameScene } from './scenes/GameScene';
+import { LevelCompleteScene } from './scenes/LevelCompleteScene';
+import { VictoryScene } from './scenes/VictoryScene';
 
 const config = {
     type: AUTO,
@@ -21,7 +23,9 @@ const config = {
     },
     scene: [
         MenuScene,
-        GameScene
+        GameScene,
+        LevelCompleteScene,
+        VictoryScene
     ]
 };
 

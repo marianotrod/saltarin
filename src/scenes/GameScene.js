@@ -11,14 +11,25 @@ export class GameScene extends Scene
         super('GameScene');
     }
 
+    init (data)
+    {
+        this.levelIndex = data?.levelIndex ?? 0;
+    }
+
     create ()
     {
-        this.levelManager = new LevelManager(this, 0);
+        this.levelManager = new LevelManager(this, this.levelIndex);
 
         this.isDying = false;
+        this.levelActive = true;
+        this.transitioning = false;
+        this.transitionStarted = false;
+
         this.handlePlayerDied = () => this.onPlayerDied();
+        this.handleLevelCompleted = (levelNumber) => this.onLevelCompleted(levelNumber);
 
         EventBus.on(EVENTS.PLAYER_DIED, this.handlePlayerDied);
+        EventBus.on(EVENTS.LEVEL_COMPLETED, this.handleLevelCompleted);
 
         this.hud = new HUD(
             this,
@@ -50,28 +61,36 @@ export class GameScene extends Scene
         this.input.on('pointerdown', this.handlePointerDown);
 
         this.player.run(this.levelManager.speed);
-        this.completionText = null;
 
         this.events.once('shutdown', () => {
             this.input.off('pointerdown', this.handlePointerDown);
             EventBus.off(EVENTS.PLAYER_DIED, this.handlePlayerDied);
+            EventBus.off(EVENTS.LEVEL_COMPLETED, this.handleLevelCompleted);
             this.hud.destroy();
         });
     }
 
     update ()
     {
+        if (this.transitioning)
+        {
+            return;
+        }
+
         if (this.isDying)
         {
             this.restartLevel();
-            this.isDying = false;
+            return;
+        }
+
+        if (!this.levelActive)
+        {
             return;
         }
 
         if (this.levelManager.update(this.player.x))
         {
-            this.player.stopRunning();
-            this.showCompletion();
+            this.finishLevel();
             return;
         }
 
@@ -85,7 +104,7 @@ export class GameScene extends Scene
 
     tryJump ()
     {
-        if (!this.levelManager.completed && !this.isDying)
+        if (this.levelActive && !this.isDying && !this.transitioning && !this.levelManager.completed)
         {
             this.player.jump();
         }
@@ -93,12 +112,16 @@ export class GameScene extends Scene
 
     canHitSpike (player, spike)
     {
-        return spike.active === true && !this.isDying && !this.levelManager.completed;
+        return spike.active === true &&
+            this.levelActive &&
+            !this.isDying &&
+            !this.transitioning &&
+            !this.levelManager.completed;
     }
 
     handleSpikeOverlap ()
     {
-        if (this.isDying || this.levelManager.completed)
+        if (!this.levelActive || this.isDying || this.transitioning || this.levelManager.completed)
         {
             return;
         }
@@ -108,12 +131,13 @@ export class GameScene extends Scene
 
     onPlayerDied ()
     {
-        if (this.isDying || this.levelManager.completed)
+        if (!this.levelActive || this.isDying || this.transitioning || this.levelManager.completed)
         {
             return;
         }
 
         this.isDying = true;
+        this.levelActive = false;
 
         const attempts = (this.registry.get('attempts') ?? 0) + 1;
 
@@ -130,34 +154,43 @@ export class GameScene extends Scene
         this.cameras.main.scrollX = LEVEL_START_X - PLAYER_SCREEN_X;
         this.cameras.main.scrollY = 0;
 
-        if (this.completionText)
-        {
-            this.completionText.destroy();
-            this.completionText = null;
-        }
+        this.isDying = false;
+        this.levelActive = true;
     }
 
-    showCompletion ()
+    finishLevel ()
     {
-        if (this.completionText)
+        if (!this.levelActive || this.transitioning)
         {
             return;
         }
 
-        const camera = this.cameras.main;
+        this.transitioning = true;
+        this.levelActive = false;
+        this.player.stopRunning();
 
-        this.completionText = this.add.text(
-            camera.width / 2,
-            camera.height / 2,
-            'Nivel completo',
-            {
-                fontFamily: 'Arial',
-                fontSize: '36px',
-                color: '#d1f7ff'
-            }
-        )
-            .setOrigin(0.5)
-            .setScrollFactor(0)
-            .setDepth(100);
+        EventBus.emit(EVENTS.LEVEL_COMPLETED, this.levelManager.level.number);
+    }
+
+    onLevelCompleted (levelNumber)
+    {
+        if (!this.transitioning || this.transitionStarted)
+        {
+            return;
+        }
+
+        this.transitionStarted = true;
+
+        if (levelNumber < this.levelManager.totalLevels)
+        {
+            this.scene.start('LevelCompleteScene', {
+                levelNumber,
+                nextLevelIndex: this.levelIndex + 1
+            });
+
+            return;
+        }
+
+        this.scene.start('VictoryScene');
     }
 }
