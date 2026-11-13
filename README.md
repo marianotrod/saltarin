@@ -2,6 +2,8 @@
 
 Runner de un botón con auto-scroll lateral. El jugador controla un cubo de neón que avanza solo por el escenario y tiene que saltar trampas para llegar al final de cada nivel. Son 3 niveles y cada uno agrega un tipo de obstáculo nuevo.
 
+**Jugar online:** https://marianotrod.github.io/saltarin/
+
 | | |
 |---|---|
 | **Trabajo práctico** | Módulo 7 — Desarrollo Tecnológico 2 |
