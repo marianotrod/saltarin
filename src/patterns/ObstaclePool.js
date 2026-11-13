@@ -13,8 +13,6 @@ export class ObstaclePool
             item.deactivate();
             this.available.push(item);
         }
-
-        console.log(`[ObstaclePool] ${type}: ${this.available.length} objetos creados`);
     }
 
     get ()

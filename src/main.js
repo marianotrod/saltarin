@@ -21,6 +21,9 @@ const config = {
         mode: Scale.FIT,
         autoCenter: Scale.CENTER_BOTH
     },
+    audio: {
+        noAudio: true
+    },
     scene: [
         MenuScene,
         GameScene,
@@ -30,7 +33,7 @@ const config = {
 };
 
 const startGame = () => {
-    new Game({ ...config, parent: 'game-container' });
+    new Game(config);
 };
 
 document.addEventListener('DOMContentLoaded', startGame);
