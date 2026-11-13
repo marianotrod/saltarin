@@ -37,11 +37,32 @@ export class LevelManager
 
     createObstaclePools ()
     {
+        this.spikeGroup = this.scene.physics.add.staticGroup();
+
         this.pools = new Map();
         this.pools.set(
             'spike',
-            new ObstaclePool('spike', () => new Spike(this.scene), POOL_CAPACITY)
+            new ObstaclePool('spike', () => {
+                const spike = new Spike(this.scene);
+
+                this.spikeGroup.add(spike);
+
+                return spike;
+            }, POOL_CAPACITY)
         );
+    }
+
+    reset ()
+    {
+        for (const pool of this.pools.values())
+        {
+            pool.releaseAll();
+        }
+
+        this.nextObstacleIndex = 0;
+        this.progress = 0;
+        this.completed = false;
+        this.lastProgressPercent = -1;
     }
 
     buildObstacleQueue ()

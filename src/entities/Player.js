@@ -34,6 +34,12 @@ export class Player extends GameObjects.Rectangle
         return true;
     }
 
+    reset (x, y)
+    {
+        this.body.reset(x, y);
+        this.body.setVelocity(0, 0);
+    }
+
     stopRunning ()
     {
         this.body.setVelocityX(0);
