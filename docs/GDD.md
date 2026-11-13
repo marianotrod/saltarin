@@ -2,7 +2,9 @@
 
 **Género:** Runner de un botón (auto-scroll lateral)
 **Plataforma:** Navegador (Phaser 4 + Vite + JavaScript)
-**Integrantes:** _[Nombre Apellido]_, _[Nombre Apellido]_
+**Materia:** Desarrollo Tecnológico 2 · Universidad Nacional de Rafaela (UNRaf)
+**Profesores:** Nocete, Nicolás - Galván, Agustín
+**Alumno:** Trod, Mariano
 
 ---
 
