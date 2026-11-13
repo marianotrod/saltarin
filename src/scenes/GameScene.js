@@ -5,6 +5,9 @@ import { GROUND_Y, LEVEL_START_X, LevelManager, PLAYER_SCREEN_X } from '../syste
 import { EventBus, EVENTS } from '../patterns/EventBus';
 
 const FALL_DEATH_DEPTH = 120;
+const BLOCK_LANDING_TOLERANCE = 8;
+const BLOCK_SNAP_SUPPORT = 2;
+const BLOCK_SNAP_EPSILON = 0.5;
 
 export class GameScene extends Scene
 {
@@ -46,6 +49,13 @@ export class GameScene extends Scene
         );
 
         this.physics.add.collider(this.player, this.levelManager.ground);
+        this.physics.add.collider(
+            this.player,
+            this.levelManager.blockGroup,
+            this.handleBlockCollision,
+            null,
+            this
+        );
         this.physics.add.overlap(
             this.player,
             this.levelManager.spikeGroup,
@@ -142,6 +152,62 @@ export class GameScene extends Scene
         }
 
         EventBus.emit(EVENTS.PLAYER_DIED);
+    }
+
+    handleBlockCollision (player, block)
+    {
+        if (!this.canHitObstacle(player, block))
+        {
+            return;
+        }
+
+        if (this.isLandingOnBlock(player, block))
+        {
+            this.snapPlayerOnBlock(player, block);
+
+            return;
+        }
+
+        EventBus.emit(EVENTS.PLAYER_DIED);
+    }
+
+    snapPlayerOnBlock (player, block)
+    {
+        if (player.body.bottom <= block.body.top + BLOCK_SNAP_EPSILON)
+        {
+            return;
+        }
+
+        const half = PLAYER_SIZE / 2;
+        const onLeft = player.body.right <= block.body.left + BLOCK_SNAP_SUPPORT;
+        const onRight = player.body.left >= block.body.right - BLOCK_SNAP_SUPPORT;
+
+        if (onLeft)
+        {
+            player.snapOnTop(
+                block.body.left + BLOCK_SNAP_SUPPORT - half,
+                block.body.top - half,
+                this.levelManager.speed
+            );
+
+            return;
+        }
+
+        if (onRight)
+        {
+            player.snapOnTop(
+                block.body.right - BLOCK_SNAP_SUPPORT + half,
+                block.body.top - half,
+                this.levelManager.speed
+            );
+        }
+    }
+
+    isLandingOnBlock (player, block)
+    {
+        const previousBottom = player.body.prev.y + player.body.height;
+
+        return previousBottom <= block.body.top + BLOCK_LANDING_TOLERANCE;
     }
 
     onPlayerDied ()

@@ -37,12 +37,17 @@ export const LEVELS = [
         length: 6300,
         obstacles: [
             { type: 'spike', x: 600, count: 2 },
+            { type: 'block', x: 1000, width: 120 },
             { type: 'pit', x: 1500, width: 140 },
+            { type: 'block', x: 1950, width: 200 },
             { type: 'spike', x: 2450, count: 1 },
             { type: 'pit', x: 2800, width: 160 },
+            { type: 'block', x: 3200, width: 160 },
             { type: 'spike', x: 3650, count: 3 },
+            { type: 'block', x: 4000, width: 120 },
             { type: 'pit', x: 4400, width: 180 },
             { type: 'spike', x: 4900, count: 2 },
+            { type: 'block', x: 5300, width: 240 },
             { type: 'spike', x: 5850, count: 1 }
         ]
     }

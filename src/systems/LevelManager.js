@@ -1,6 +1,7 @@
 import { LEVELS } from '../data/levels';
 import { Spike, SPIKE_SIZE } from '../entities/Spike';
 import { Pit } from '../entities/Pit';
+import { Block } from '../entities/Block';
 import { EventBus, EVENTS } from '../patterns/EventBus';
 import { ObstaclePool } from '../patterns/ObstaclePool';
 
@@ -9,6 +10,7 @@ export const PLAYER_SCREEN_X = 256;
 export const LEVEL_START_X = 0;
 export const POOL_CAPACITY = 8;
 export const PIT_POOL_CAPACITY = 3;
+export const BLOCK_POOL_CAPACITY = 3;
 
 const SPAWN_MARGIN = 64;
 const CULL_MARGIN = 64;
@@ -41,6 +43,7 @@ export class LevelManager
     {
         this.spikeGroup = this.scene.physics.add.staticGroup();
         this.pitGroup = this.scene.physics.add.staticGroup();
+        this.blockGroup = this.scene.physics.add.staticGroup();
 
         this.pools = new Map();
         this.pools.set(
@@ -63,6 +66,17 @@ export class LevelManager
 
                 return pit;
             }, PIT_POOL_CAPACITY)
+        );
+
+        this.pools.set(
+            'block',
+            new ObstaclePool('block', () => {
+                const block = new Block(this.scene);
+
+                this.blockGroup.add(block);
+
+                return block;
+            }, BLOCK_POOL_CAPACITY)
         );
     }
 

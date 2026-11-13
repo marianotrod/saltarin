@@ -40,6 +40,12 @@ export class Player extends GameObjects.Rectangle
         this.body.setVelocity(0, 0);
     }
 
+    snapOnTop (x, y, speed)
+    {
+        this.body.reset(x, y);
+        this.run(speed);
+    }
+
     stopRunning ()
     {
         this.body.setVelocityX(0);
